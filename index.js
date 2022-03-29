@@ -46,11 +46,35 @@ app.get('/api/persons/', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
 
-    persons.concat(request.body)
-    console.log(request.body)
+  const body = request.body
 
-    response.status(201).end()
+  if (!body.name) {
+
+    return response.status(400).json({ error: 'name missing'})
+
+  }
+
+   const person = {
+
+    name: body.name,
+    phone: body.phone,
+    id: generateId()
+   }
+
+    persons = persons.concat(person)
+    console.log(person)
+
+    response.json(person)
 })
+
+const generateId = () => {
+
+  const max = persons.length > 0 ? Math.max(...persons.map(p => p.id)) : 0
+  console.log(max)
+
+  return max + 1
+
+}
 
 app.get('/api/persons/:id', (request, response) => {
 
