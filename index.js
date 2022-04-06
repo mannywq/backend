@@ -73,7 +73,7 @@ app.post('/api/persons', (request, response) => {
 
   }
 
-  if (!body.number) {
+  if (!body.phone) {
 
     return response.status(400).json({ error: 'number missing'})
 
@@ -89,7 +89,7 @@ app.post('/api/persons', (request, response) => {
 
   }
 
-  let number = persons.find(p => p.number === body.number )
+  let number = persons.find(p => p.phone === body.phone )
 
   if (number) {
 
