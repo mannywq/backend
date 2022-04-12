@@ -7,6 +7,7 @@ const cors = require('cors')
 //database setup
 require('dotenv').config()
 const Person = require('./modules/person')
+const { response } = require('express')
 
 //start express server and serve static react files
 const app = express()
@@ -79,16 +80,18 @@ app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
     console.log(id)
 
-    Person.find({_id: id})
+    Person.findById(id)
     .then(result => {
 
-      response.json(result).end()
+      if (result) {
+      response.json(result)
+      } else {
+
+        response.status(404).end()
+      }
 
     })
-    .catch(error => {
-
-      response.status(404).json({ error: error.message })
-    })
+    .catch(error => next(error))
     
 
 })
@@ -97,7 +100,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
     const id = request.params.id
 
-    Person.deleteOne({_id: id})
+    Person.findByIdAndDelete(id)
     .then(result => {
 
       response.status(204).end()
@@ -112,6 +115,33 @@ app.delete('/api/persons/:id', (request, response) => {
     
 
 })
+
+app.put('/api/persons/:id', (req, res) => {
+
+  const id = req.params.id
+  const body = req.body
+
+  Person.findByIdAndUpdate( id, body)
+  .then(data => {
+
+    res.status(204).json(body)
+  })
+  .catch(error => next(error))
+
+
+})
+
+const errorHandler = (error, req, res, next) => {
+
+  if (error.name === 'CastError') {
+
+    return response.status(400).send({ error: 'invalid id'})
+  }
+  next(error)
+
+}
+
+app.use(errorHandler)
 
 const PORT = 3001
 
