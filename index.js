@@ -47,6 +47,7 @@ app.get('/api/persons/', (request, response) => {
       response.json(result)
 
     })
+    .catch(error => next(error))
 
 })
 
@@ -71,6 +72,7 @@ app.post('/api/persons', (request, response) => {
     response.json(savedPerson)
 
   })
+  .catch(error => next(error))
 
 
 })
@@ -137,6 +139,7 @@ const errorHandler = (error, req, res, next) => {
 
     return response.status(400).send({ error: 'invalid id'})
   }
+  
   next(error)
 
 }
