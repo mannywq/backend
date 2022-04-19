@@ -51,15 +51,10 @@ app.get('/api/persons/', (request, response) => {
 
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
 
   const body = request.body
 
-  /*if (body.content === undefined) {
-
-    return response.status(400).json({ error: 'content missing'})
-
-  }*/
 
   const person = new Person({
     name: body.name, 
@@ -118,15 +113,15 @@ app.delete('/api/persons/:id', (request, response) => {
 
 })
 
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
 
   const id = req.params.id
   const body = req.body
 
-  Person.findByIdAndUpdate( id, body)
+  Person.findByIdAndUpdate( id, body, {new:true, runValidators:true, context: query})
   .then(data => {
 
-    res.status(204).json(body)
+    res.status(204).json(data)
   })
   .catch(error => next(error))
 
