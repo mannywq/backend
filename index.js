@@ -121,7 +121,7 @@ app.put('/api/persons/:id', (req, res, next) => {
     const body = req.body
 
     // eslint-disable-next-line no-undef
-    Person.findByIdAndUpdate( id, body, {new:true, runValidators:true, context: query})
+    Person.findByIdAndUpdate( id, body, {new:true, runValidators:true, context: 'query'})
         .then(data => {
 
             res.status(204).json(data)
