@@ -7,6 +7,7 @@ const cors = require('cors')
 //database setup
 require('dotenv').config()
 const Person = require('./modules/person')
+// eslint-disable-next-line no-unused-vars
 const { response } = require('express')
 
 //start express server and serve static react files
@@ -16,9 +17,10 @@ app.use(express.json())
 app.use(express.static('build'))
 
 //configure morgan response
+// eslint-disable-next-line no-unused-vars
 morgan.token('custom', (req, res) => {
 
-  return JSON.stringify(req.body)
+    return JSON.stringify(req.body)
 
 })
 app.use(morgan(':method :url :status :custom'))
@@ -30,65 +32,65 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello world!</h1>')
 })
 
-app.get('/info/', (req, res) => {
+/*app.get('/info/', (req, res) => {
 
-  date = new Date()
+  const date = new Date()
 
   res.type('text/html')
   res.send(`<p>The phonebook has ${persons.length} entries as of ${date}</p>`)
 
-})
+})*/
 
 app.get('/api/persons/', (request, response, next) => {
 
     Person.find({})
-    .then(result => {
+        .then(result => {
 
-      response.json(result)
+            response.json(result)
 
-    })
-    .catch(error => next(error))
+        })
+        .catch(error => next(error))
 
 })
 
 app.post('/api/persons', (request, response, next) => {
 
-  const body = request.body
+    const body = request.body
 
 
-  const person = new Person({
-    name: body.name, 
-    phone: body.phone
-  })
+    const person = new Person({
+        name: body.name, 
+        phone: body.phone
+    })
 
-  person.save()
-  .then(savedPerson => {
+    person.save()
+        .then(savedPerson => {
 
-    response.json(savedPerson)
+            response.json(savedPerson)
 
-  })
-  .catch(error => next(error))
+        })
+        .catch(error => next(error))
 
 
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
 
     const id = request.params.id
     console.log(id)
 
     Person.findById(id)
-    .then(result => {
+        .then(result => {
 
-      if (result) {
-      response.json(result)
-      } else {
+            if (result) {
+                response.json(result)
+            } else {
 
-        response.status(404).end()
-      }
+                response.status(404).end()
+            }
 
-    })
-    .catch(error => next(error))
+        })
+        .catch(error => next(error))
     
 
 })
@@ -98,49 +100,50 @@ app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
 
     Person.findByIdAndDelete(id)
-    .then(result => {
+        .then(result => {
 
-      response.status(204).end()
+            response.status(204).send(result)
 
-    })
-    .catch(error => {
+        })
+        .catch(error => {
 
-      response.status(404).json({ error: error.message })
+            response.status(404).json({ error: error.message })
 
 
-    })    
+        })    
     
 
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
 
-  const id = req.params.id
-  const body = req.body
+    const id = req.params.id
+    const body = req.body
 
-  Person.findByIdAndUpdate( id, body, {new:true, runValidators:true, context: query})
-  .then(data => {
+    // eslint-disable-next-line no-undef
+    Person.findByIdAndUpdate( id, body, {new:true, runValidators:true, context: query})
+        .then(data => {
 
-    res.status(204).json(data)
-  })
-  .catch(error => next(error))
+            res.status(204).json(data)
+        })
+        .catch(error => next(error))
 
 
 })
 
 const errorHandler = (error, req, res, next) => {
 
-  if (error.name === 'CastError') {
+    if (error.name === 'CastError') {
 
-    return res.status(400).send({ error: 'invalid id'})
-  }
+        return res.status(400).send({ error: 'invalid id'})
+    }
 
-  if (error.name === 'ValidationError') {
+    if (error.name === 'ValidationError') {
 
-    return res.status(409).send(error.message)
-  }
+        return res.status(409).send(error.message)
+    }
   
-  next(error)
+    next(error)
 
 }
 

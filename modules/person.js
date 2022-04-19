@@ -1,13 +1,16 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
+require('dotenv').config()
 
-url = process.env.MONGO_URI
+// eslint-disable-next-line no-undef
+const url = process.env.MONGO_URI
 
 console.log('connecting to', url)
 
 mongoose.connect(url)
-.then(response =>
-    console.log('connected to', url)
+// eslint-disable-next-line no-unused-vars
+    .then(response =>
+        console.log('connected to', url)
     )
     .catch((error) => {
 
@@ -35,7 +38,7 @@ const personSchema = new mongoose.Schema({
                 return /\d{2,3}-?\d{5,}/.test(v)
             }, message: props => `${props.value} is not a valid phone number`
         }
-        }
+    }
 
 })
 
@@ -50,6 +53,6 @@ personSchema.set('toJSON', {
         delete returnedObject.__v
     }
     
-    })
+})
 
-module.exports = mongoose.model('Person', personSchema);
+module.exports = mongoose.model('Person', personSchema)
