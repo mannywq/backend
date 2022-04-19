@@ -39,7 +39,7 @@ app.get('/info/', (req, res) => {
 
 })
 
-app.get('/api/persons/', (request, response) => {
+app.get('/api/persons/', (request, response, next) => {
 
     Person.find({})
     .then(result => {
@@ -132,7 +132,12 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === 'CastError') {
 
-    return response.status(400).send({ error: 'invalid id'})
+    return res.status(400).send({ error: 'invalid id'})
+  }
+
+  if (error.name === 'ValidationError') {
+
+    return res.status(409).send(error.message)
   }
   
   next(error)
