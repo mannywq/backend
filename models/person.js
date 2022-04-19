@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 require('dotenv').config()
 
+<<<<<<< HEAD:modules/person.js
 // eslint-disable-next-line no-undef
 const url = process.env.MONGO_URI
 
@@ -18,6 +19,8 @@ mongoose.connect(url)
 
 
     })
+=======
+>>>>>>> dev:models/person.js
 
 const personSchema = new mongoose.Schema({
 

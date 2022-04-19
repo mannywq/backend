@@ -1,9 +1,11 @@
+const app = require('./app')
+const http = require('http')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
 
-//basic routing and middleware
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
+const server = http.createServer(app)
 
+<<<<<<< HEAD
 //database setup
 require('dotenv').config()
 const Person = require('./modules/person')
@@ -155,3 +157,7 @@ app.listen(PORT, () =>{
 
     console.log(`Server running on port ${PORT}`)
 })      
+=======
+server.listen(config.PORT)
+logger.info(`Server running on port ${config.PORT}`)
+>>>>>>> dev
